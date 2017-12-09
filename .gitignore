@@ -17,3 +17,5 @@
 # Maven
 log/
 target/
+
+gs-accessing-data-jpa-complete/target/classes/META-INF/MANIFEST.MF
