@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.City;
 
 public interface CityRepository extends CrudRepository<City, Integer> {
 
+  public City findOneByCity(String city);
+
 }

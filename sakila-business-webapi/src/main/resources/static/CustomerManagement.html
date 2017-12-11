@@ -5,23 +5,18 @@
             .username.ng-valid {
                 background - color: lightgreen;
             }
-
             .username.ng-dirty.ng-invalid-required {
                 background - color: red;
             }
-
             .username.ng-dirty.ng-invalid-minlength {
                 background - color: yellow;
             }
-
             .email.ng-valid {
                 background - color: lightgreen;
             }
-
             .email.ng-dirty.ng-invalid-required {
                 background - color: red;
             }
-
             .email.ng-dirty.ng-invalid-email {
                 background - color: yellow;
             }
@@ -37,12 +32,13 @@
                 <div class="formcontainer">
                     <form ng-submit="ctrl.submit()" name="myForm" class="form-horizontal">
                         <input type="hidden" ng-model="ctrl.customer.customerId" />
+                        <input type="hidden" ng-model="ctrl.customer.address.addressId" />
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label class="col-md-2 control-lable" for="file">Last Name</label>
                                 <div class="col-md-7">
                                     <input type="text" ng-model="ctrl.customer.lastName" name="lastName" class="form-control input-sm" placeholder="Enter your name" required ng-minlength="3" />
-                                    <div class="has-error" ng-show="myForm.$dirty"> <span ng-show="myForm.lastName.$error.required">This is a required field</span> <span ng-show="myForm.lastName.$error.minlength">Minimum length required is 3</span> <span ng-show="myForm.lastName.$invalid">This field is invalid </span> </div>
+                                    <div class="has-error" ng-show="myForm.$dirty"> <span ng-show="myForm.lastName.$error.required">This is a required field</span></div>
                                 </div>
                             </div>
                         </div>
@@ -50,9 +46,45 @@
                             <div class="form-group col-md-12">
                                 <label class="col-md-2 control-lable" for="file">First Name</label>
                                 <div class="col-md-7">
-                                    <input type="text" ng-model="ctrl.customer.firstName" name="firstName" class="form-control input-sm" placeholder="Enter Customer First Name. [This field is validation free]" />
+                                    <input type="text" ng-model="ctrl.customer.firstName" name="firstName" class="form-control input-sm" placeholder="Enter your First Name." />
                                     <div class="has-error" ng-show="myForm.$dirty"><span ng-show="myForm.firstName.$error.required">This is a required field</span> </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-2 control-lable" for="file">Email</label>
+                                <div class="col-md-7">
+                                    <input type="text" ng-model="ctrl.customer.email" name="email" class="form-control input-sm" placeholder="Enter your Email." />
+                                    <div class="has-error" ng-show="myForm.$dirty"><span ng-show="myForm.email.$error.required">This is a required field</span> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-2 control-lable" for="file">Address</label>
+                                <div class="col-md-7">
+                                    <input type="text" ng-model="ctrl.customer.address.address" name="address" class="form-control input-sm" placeholder="Enter your Address." />
+                                    <div class="has-error" ng-show="myForm.$dirty"><span ng-show="myForm.address.$error.required">This is a required field</span> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-2 control-lable" for="file">City</label>
+                                <div class="col-md-7">
+                                    <input type="text" ng-model="ctrl.customer.address.city.city" name="city" class="form-control input-sm" placeholder="Enter your City." />
+                                    <div class="has-error" ng-show="myForm.$dirty"><span ng-show="myForm.city.$error.required">This is a required field</span> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+	                        	<label class="col-md-2 control-lable" for="file">Country</label>
+	                        	<div class="col-md-7">
+                                    <input type="text" ng-model="ctrl.customer.address.city.country.country" name="city" class="form-control input-sm" placeholder="Enter your Country." />
+                                	<div class="has-error" ng-show="myForm.$dirty"><span ng-show="myForm.country.$error.required">This is a required field</span> </div>
+	                             </div>
                             </div>
                         </div>
                         <div class="row">
@@ -89,7 +121,7 @@
                                 	<span ng-bind="u.store.address.city.city"></span>
                                 	-
                                 	<span ng-bind="u.store.address.city.country.country"></span>
-                                	
+
                                 	</p>
                                 </td>
                                 <td><span ng-bind="u.lastName"></span></td>
@@ -101,7 +133,7 @@
                                 	<span ng-bind="u.address.city.city"></span>
                                 	-
                                 	<span ng-bind="u.address.city.country.country"></span>
-                                	
+
                                 	</p>
                                 </td>
                                 <td>
