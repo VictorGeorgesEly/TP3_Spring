@@ -7,9 +7,9 @@ public class ActorWO extends WebObject
 
 	private static final long	serialVersionUID	= -1377067679473844279L;
 
-	protected int							actorId;
-	protected String					lastName;
-	protected String					firstName;
+	protected int actorId;
+	protected String lastName;
+	protected String firstName;
 
 	public ActorWO()
 	{
