@@ -11,47 +11,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import isep.web.sakila.dao.repositories.AddressRepository;
-import isep.web.sakila.dao.repositories.CityRepository;
 import isep.web.sakila.dao.repositories.CustomerRepository;
 import isep.web.sakila.dao.repositories.StoreRepository;
-import isep.web.sakila.jpa.entities.Address;
-import isep.web.sakila.jpa.entities.City;
 import isep.web.sakila.jpa.entities.Customer;
-import isep.web.sakila.webapi.model.AddressWO;
 import isep.web.sakila.webapi.model.CustomerWO;
-import isep.web.sakila.webapi.model.StoreWO;
+
 
 @Service("customerService")
 @Transactional
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl implements CustomerService{
+
 	@Autowired
 	private CustomerRepository customerRepository;
+
 	@Autowired
 	private AddressRepository addressRepository;
-	@Autowired
-	private CityRepository cityRepository;
+
 	@Autowired
 	private StoreRepository storeRepository;
 
-	private static final Log	log	= LogFactory.getLog(CustomerServiceImpl.class);
-
-	@Override
-	public List<CustomerWO> findAllCustomers() {
-		List<CustomerWO> customers = new LinkedList<CustomerWO>();
-		CustomerWO currentCustomer = null;
-		for (Customer customer : customerRepository.findAll()) {
-			currentCustomer = new CustomerWO(customer);
-			currentCustomer.setAddress(new AddressWO(customer.getAddress()));
-			currentCustomer.setStore(new StoreWO(customer.getStore()));
-			customers.add(currentCustomer);
-			log.debug("Customer : " + customer);
-		}
-		return customers;
-	}
+	private static final Log log= LogFactory.getLog(CustomerServiceImpl.class);
 
 	@Override
 	public CustomerWO findById(int id) {
-		log.debug(String.format("Looking for user by Id %s", id));
+		log.debug(String.format("Looking for customer by Id %s", id));
 		Customer customer = customerRepository.findOne(id);
 
 		if (customer != null)
@@ -61,65 +44,47 @@ public class CustomerServiceImpl implements CustomerService {
 		return null;
 	}
 
-	@Override
-	public void saveCustomer(CustomerWO userWO) {
-		System.out.println(userWO);
+	public List<CustomerWO> findAllCustomers()
+	{
+		List<CustomerWO> customers = new LinkedList<CustomerWO>();
+
+		for (Customer customer : customerRepository.findAllOrderByLastName())
+		{
+			customers.add(new CustomerWO(customer));
+			log.debug("Adding " + customer);
+		}
+
+		return customers;
+	}
+
+	public CustomerWO saveCustomer(CustomerWO customerWO)
+	{
+
 		Customer customer = new Customer();
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		customer.setLastName(userWO.getLastName());
-		customer.setFirstName(userWO.getFirstName());
-		customer.setEmail(userWO.getEmail());
-		if (userWO.getAddress() !=null) {
-			saveAddress(userWO.getAddress());
-			customer.setAddress(addressRepository.findOne(userWO.getAddress().getAddressId()));
-		}
-		if (userWO.getStore()!=null) {
-			customer.setStore(storeRepository.findOne(userWO.getStore().getStoreId()));
-		}
-		customer.setCreateDate(time);
-		customer.setLastUpdate(time);
-		customerRepository.save(customer);
+		customer.setLastName(customerWO.getLastName());
+		customer.setFirstName(customerWO.getFirstName());
+		customer.setEmail(customerWO.getEmail());
+		customer.setAddress(addressRepository.findOne(customerWO.getAddress().getAddressId()));
+		customer.setStore(storeRepository.findOne(1));
+		customer.setCreateDate(new Timestamp(System.currentTimeMillis()));
+		customer.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+		Customer c = customerRepository.save(customer);
+		return (new CustomerWO(c));
+	}
+
+	public void updateCustomer(CustomerWO customerWO)
+	{
+		Customer customer2update = customerRepository.findOne(customerWO.getCustomerId());
+		customer2update.setLastName(customerWO.getLastName());
+		customer2update.setFirstName(customerWO.getFirstName());
+		customer2update.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+		customerRepository.save(customer2update);
 	}
 
 	@Override
-	public void updateCustomer(CustomerWO userWO) {
-		System.out.println(userWO);
-		Customer customer = customerRepository.findOne(userWO.getCustomerId());
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		customer.setLastName(userWO.getLastName());
-		customer.setFirstName(userWO.getFirstName());
-		customer.setEmail(userWO.getEmail());
-		if (userWO.getAddress() !=null) {
-			saveAddress(userWO.getAddress());
-			customer.setAddress(addressRepository.findOne(userWO.getAddress().getAddressId()));
-		}
-		if (userWO.getStore()!=null) {
-			customer.setStore(storeRepository.findOne(userWO.getStore().getStoreId()));
-		}
-		customer.setCreateDate(time);
-		customer.setLastUpdate(time);
-		customerRepository.save(customer);
-	}
-
-	@Override
-	public void deleteCustomerById(int id) {
-		log.debug(String.format("Delete user with Id %s", id));
+	public void deleteCustomerById(int id)
+	{
 		customerRepository.delete(id);
-	}
-
-	private void saveAddress(AddressWO addressWO) {
-		Address address = new Address();
-		City city = null;
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		address.setAddress(addressWO.getAddress());
-		address.setAddress2(addressWO.getAddress2());
-		address.setDistrict(addressWO.getDistrict());
-		address.setPostalCode(addressWO.getPostalCode());
-		address.setPhone(addressWO.getPhone());
-		city = cityRepository.findOneByCity(addressWO.getCity().getCity());
-		address.setCity(city);
-		address.setLastUpdate(time);
-		addressRepository.save(address);
 	}
 
 }

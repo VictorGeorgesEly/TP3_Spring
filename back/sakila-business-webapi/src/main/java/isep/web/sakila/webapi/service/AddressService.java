@@ -2,17 +2,21 @@ package isep.web.sakila.webapi.service;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.springframework.validation.annotation.Validated;
+
+import isep.web.sakila.jpa.entities.Address;
 import isep.web.sakila.webapi.model.AddressWO;
 
+@Validated
 public interface AddressService {
+
 	AddressWO findById(int id);
 
-	void saveAddress(AddressWO addressWO);
+	Address saveAddress(@NotNull AddressWO addressWO);
 
-	void updateAddress(AddressWO addressWO);
-
-	void deleteAddressById(int id);
+	Address updateAddress(AddressWO addressWO);
 
 	List<AddressWO> findAllAddresses();
-
 }

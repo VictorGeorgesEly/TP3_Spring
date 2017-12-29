@@ -19,9 +19,9 @@ import isep.web.sakila.webapi.model.ActorWO;
 public class ActorServiceImpl implements ActorService
 {
 	@Autowired
-	private ActorRepository		actorRepository;
+	private ActorRepository	actorRepository;
 
-	private static final Log	log	= LogFactory.getLog(ActorServiceImpl.class);
+	private static final Log log	= LogFactory.getLog(ActorServiceImpl.class);
 
 	public List<ActorWO> findAllActors()
 	{

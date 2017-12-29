@@ -13,32 +13,23 @@ import org.springframework.transaction.annotation.Transactional;
 import isep.web.sakila.dao.repositories.AddressRepository;
 import isep.web.sakila.dao.repositories.CityRepository;
 import isep.web.sakila.jpa.entities.Address;
-import isep.web.sakila.jpa.entities.City;
 import isep.web.sakila.webapi.model.AddressWO;
 
 @Service("addressService")
 @Transactional
 public class AddressServiceImpl implements AddressService {
+
 	@Autowired
 	private AddressRepository addressRepository;
+
 	@Autowired
 	private CityRepository cityRepository;
 
-	private static final Log	log	= LogFactory.getLog(AddressServiceImpl.class);
-
-	@Override
-	public List<AddressWO> findAllAddresses() {
-		List<AddressWO> addresses = new LinkedList<AddressWO>();
-		for (Address address : addressRepository.findAll()) {
-			addresses.add(new AddressWO(address));
-			log.debug("Address : " + address);
-		}
-		return addresses;
-	}
+	private static final Log log= LogFactory.getLog(AddressServiceImpl.class);
 
 	@Override
 	public AddressWO findById(int id) {
-		log.debug(String.format("Looking for user by Id %s", id));
+		log.debug(String.format("Looking for address by Id %s", id));
 		Address address = addressRepository.findOne(id);
 
 		if (address != null)
@@ -49,40 +40,46 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public void saveAddress(AddressWO addressWO) {
+	public Address saveAddress(AddressWO addressWO) {
 		Address address = new Address();
-		City city = null;
-		Timestamp time = new Timestamp(System.currentTimeMillis());
 		address.setAddress(addressWO.getAddress());
 		address.setAddress2(addressWO.getAddress2());
-		address.setDistrict(addressWO.getDistrict());
+		address.setDistrict("");
 		address.setPostalCode(addressWO.getPostalCode());
 		address.setPhone(addressWO.getPhone());
-		city = cityRepository.findOneByCity(addressWO.getCity().getCity());
-		address.setCity(city);
-		address.setLastUpdate(time);
-		addressRepository.save(address);
+		address.setCity(cityRepository.findOne(addressWO.getCityId()));
+
+		address.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+		Address a = addressRepository.save(address);
+		return a;
 	}
 
 	@Override
-	public void updateAddress(AddressWO addressWO) {
-		Address address = addressRepository.findOne(addressWO.getAddressId());
-		City city = null;
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		address.setAddress(addressWO.getAddress());
-		address.setAddress2(addressWO.getAddress2());
-		address.setDistrict(addressWO.getDistrict());
-		address.setPostalCode(addressWO.getPostalCode());
-		address.setPhone(addressWO.getPhone());
-		city = cityRepository.findOneByCity(addressWO.getCity().getCity());
-		address.setCity(city);
-		address.setLastUpdate(time);
-		addressRepository.save(address);
+	public Address updateAddress(AddressWO addressWO) {
+		Address address2update = addressRepository.findOne(addressWO.getAddressId());
+		address2update.setAddress(addressWO.getAddress());
+		address2update.setAddress2(addressWO.getAddress2());
+		address2update.setDistrict(addressWO.getDistrict());
+		address2update.setPostalCode(addressWO.getPostalCode());
+		address2update.setPhone(addressWO.getPhone());
+		address2update.setCity(cityRepository.findOne(addressWO.getCityId()));
+		address2update.setLastUpdate(new Timestamp(System.currentTimeMillis()));
+		Address a = addressRepository.save(address2update);
+		return a;
+
 	}
 
 	@Override
-	public void deleteAddressById(int id) {
-		log.debug(String.format("Delete address with Id %s", id));
-		addressRepository.delete(id);
+	public List<AddressWO> findAllAddresses() {
+		List<AddressWO> addresses = new LinkedList<AddressWO>();
+
+		for (Address address : addressRepository.findAll())
+		{
+			addresses.add(new AddressWO(address));
+			log.debug("Adding " + address);
+		}
+
+		return addresses;
 	}
+
 }

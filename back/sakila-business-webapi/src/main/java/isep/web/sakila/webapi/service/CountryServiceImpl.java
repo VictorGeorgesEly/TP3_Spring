@@ -1,6 +1,5 @@
 package isep.web.sakila.webapi.service;
 
-import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,23 +15,12 @@ import isep.web.sakila.webapi.model.CountryWO;
 
 @Service("countryService")
 @Transactional
-public class CountryServiceImpl implements CountryService {
+public class CountryServiceImpl implements CountryService{
+
 	@Autowired
 	private CountryRepository countryRepository;
 
-	private static final Log	log	= LogFactory.getLog(CountryServiceImpl.class);
-
-	@Override
-	public List<CountryWO> findAllCountries() {
-		List<CountryWO> countries = new LinkedList<CountryWO>();
-		CountryWO currentCountry = null;
-		for (Country country : countryRepository.findAll()) {
-			currentCountry = new CountryWO(country);
-			countries.add(currentCountry);
-			log.debug("Country : " + country);
-		}
-		return countries;
-	}
+	private static final Log log= LogFactory.getLog(CountryServiceImpl.class);
 
 	@Override
 	public CountryWO findById(int id) {
@@ -46,28 +34,16 @@ public class CountryServiceImpl implements CountryService {
 		return null;
 	}
 
-	@Override
-	public void saveCountry(CountryWO countryWO) {
-		Country country = new Country();
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		country.setCountry(countryWO.getCountry());
-		country.setLastUpdate(time);
-		countryRepository.save(country);
-	}
+	public List<CountryWO> findAllCountries()
+	{
+		List<CountryWO> countries = new LinkedList<CountryWO>();
 
-	@Override
-	public void updateCountry(CountryWO countryWO) {
-		Country country = countryRepository.findOne(countryWO.getCountryId());
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		country.setCountry(countryWO.getCountry());
-		country.setLastUpdate(time);
-		countryRepository.save(country);
-	}
+		for (Country country : countryRepository.findAll())
+		{
+			countries.add(new CountryWO(country));
+			log.debug("Adding " + country);
+		}
 
-	@Override
-	public void deleteCountryById(int id) {
-		log.debug(String.format("Delete country with Id %s", id));
-		countryRepository.delete(id);
+		return countries;
 	}
-
 }
