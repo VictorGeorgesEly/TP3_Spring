@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,23 +17,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import isep.web.sakila.jpa.entities.Address;
 import isep.web.sakila.webapi.model.AddressWO;
 import isep.web.sakila.webapi.model.CustomerWO;
 import isep.web.sakila.webapi.service.AddressService;
 import isep.web.sakila.webapi.service.CustomerService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class CustomerRestController
 {
 
 	@Autowired
-	CustomerService	customerService;
+	CustomerService customerService;
 
 	@Autowired
 	AddressService addressService;
 
-	private static final Log	log	= LogFactory.getLog(CustomerRestController.class);
+	private static final Log log = LogFactory.getLog(CustomerRestController.class);
 
+	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/customer/", method = RequestMethod.GET)
 	public ResponseEntity<List<CustomerWO>> listAllCustomers()
 	{
@@ -44,39 +48,43 @@ public class CustomerRestController
 		return new ResponseEntity<List<CustomerWO>>(customers, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/customer/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CustomerWO> getCustomer(@PathVariable("id") int id)
 	{
 		System.out.println("Fetching Customer with id " + id);
-		CustomerWO staffWO = customerService.findById(id);
-		if (staffWO == null)
+		CustomerWO customerWO = customerService.findById(id);
+		if (customerWO == null)
 		{
 			System.out.println("Customer with id " + id + " not found");
 			return new ResponseEntity<CustomerWO>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<CustomerWO>(staffWO, HttpStatus.OK);
+		return new ResponseEntity<CustomerWO>(customerWO, HttpStatus.OK);
 	}
 
 	// -------------------Create a Customer----------------------------------
 
+	@CrossOrigin(origins = "*")
 	@RequestMapping(value = "/customer/", method = RequestMethod.POST)
-	public ResponseEntity<Void> createCustomer(@RequestBody CustomerWO customerWO, UriComponentsBuilder ucBuilder)
+	public ResponseEntity<CustomerWO> createCustomer(@RequestBody CustomerWO customerWO, UriComponentsBuilder ucBuilder)
 	{
-		System.out.println("Creating customer " + customerWO.getLastName());
+		System.out.println("Creating Customer " + customerWO.toString());
 
-		customerService.saveCustomer(customerWO);
+		Address newAddress = addressService.saveAddress(customerWO.getAddress());
+		customerWO.setAddress(new AddressWO(newAddress));
+
+		CustomerWO newCustomer = customerService.saveCustomer(customerWO);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(ucBuilder.path("/customer/{id}").buildAndExpand(customerWO.getCustomerId()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		return new ResponseEntity<CustomerWO>(newCustomer, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/customerUpdate/", method = RequestMethod.POST)
+	@CrossOrigin(origins = "*")
+	@RequestMapping(value = "/customerUpdate/", method = RequestMethod.PUT)
 	public ResponseEntity<CustomerWO> updateCustomer(@RequestBody CustomerWO customerWO, UriComponentsBuilder ucBuilder)
 	{
-		log.error(String.format("Updating customer %s ", customerWO.getCustomerId()));
+		log.error(String.format("Updating Customer %s ", customerWO.getCustomerId()));
 		CustomerWO currentCustomer = customerService.findById(customerWO.getCustomerId());
-		AddressWO currentAddress = addressService.findById(customerWO.getAddress().getAddressId());
 
 		if (currentCustomer == null)
 		{
@@ -84,36 +92,28 @@ public class CustomerRestController
 			return new ResponseEntity<CustomerWO>(HttpStatus.NOT_FOUND);
 		}
 
-		currentAddress.setAddress(customerWO.getAddress().getAddress());
-		currentAddress.setAddress2(customerWO.getAddress().getAddress2());
-		currentAddress.setCity(customerWO.getAddress().getCity());
-		addressService.updateAddress(currentAddress);
+		AddressWO address = addressService.findById(currentCustomer.getAddress().getAddressId());
+
+		if (address == null)
+		{
+			System.out.println("Address with id " + customerWO.getAddress().getAddressId() + " not found");
+			return new ResponseEntity<CustomerWO>(HttpStatus.NOT_FOUND);
+		}
+
+		address.setAddress(customerWO.getAddress().getAddress());
+		address.setAddress2(customerWO.getAddress().getAddress2());
+		address.setDistrict(customerWO.getAddress().getDistrict());
+		address.setPhone(customerWO.getAddress().getPhone());
+		address.setPostalCode(customerWO.getAddress().getPostalCode());
+		address.setCityId(customerWO.getAddress().getCityId());
+		addressService.updateAddress(address);
 
 		currentCustomer.setLastName(customerWO.getLastName());
 		currentCustomer.setFirstName(customerWO.getFirstName());
 		currentCustomer.setEmail(customerWO.getEmail());
-		currentCustomer.setAddress(currentAddress);
-		//currentCustomer.setStore(customerWO.getStore());
-
 		customerService.updateCustomer(currentCustomer);
 
 		return new ResponseEntity<CustomerWO>(currentCustomer, HttpStatus.OK);
 	}
-
-	@RequestMapping(value = "/customerDelete/{id}", method = RequestMethod.GET)
-	public ResponseEntity<CustomerWO> deleteCustomer(@PathVariable("id") int id)
-	{
-
-		System.out.println("Fetching & Deleting Customer with id " + id);
-
-		CustomerWO customerWO = customerService.findById(id);
-		if (customerWO == null)
-		{
-			System.out.println("Unable to delete. Customer with id " + id + " not found");
-			return new ResponseEntity<CustomerWO>(HttpStatus.NOT_FOUND);
-		}
-
-		customerService.deleteCustomerById(id);
-		return new ResponseEntity<CustomerWO>(HttpStatus.NO_CONTENT);
-	}
+  
 }

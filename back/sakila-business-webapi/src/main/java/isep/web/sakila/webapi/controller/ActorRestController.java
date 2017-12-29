@@ -20,13 +20,12 @@ import isep.web.sakila.webapi.model.ActorWO;
 import isep.web.sakila.webapi.service.ActorService;
 
 @RestController
-public class ActorRestController
-{
+public class ActorRestController {
 
 	@Autowired
-	ActorService							actorService;
+	ActorService actorService;
 
-	private static final Log	log	= LogFactory.getLog(ActorRestController.class);
+	private static final Log log = LogFactory.getLog(ActorRestController.class);
 
 	@RequestMapping(value = "/actor/", method = RequestMethod.GET)
 	public ResponseEntity<List<ActorWO>> listAllActors()
@@ -101,4 +100,5 @@ public class ActorRestController
 		actorService.deleteActorById(id);
 		return new ResponseEntity<ActorWO>(HttpStatus.NO_CONTENT);
 	}
+
 }
