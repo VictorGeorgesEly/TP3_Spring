@@ -4,5 +4,3 @@
 
 - Victor ELY
 - Qun WANG
-
-## V2.0 sur la deuxième branche
