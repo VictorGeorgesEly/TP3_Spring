@@ -2,28 +2,31 @@ package isep.web.sakila.webapi.model;
 
 import isep.web.sakila.jpa.entities.Inventory;
 
-public class InventoryWO extends WebObject {
+public class InventoryWO extends WebObject{
 
 	private static final long serialVersionUID = 8022142672944572088L;
 
 	protected int inventoryId;
+	protected int filmId;
+	protected int storeId;
 
-	protected StoreWO storeWO;
-	protected FilmWO filmWO;
-
-	InventoryWO() {
+	public InventoryWO() {
 		super();
 	}
 
-	public InventoryWO(int inventoryId)
-	{
-		this();
-		this.inventoryId = inventoryId;
+	public InventoryWO(int id, int customerId, int filmId) {
+		super();
+		this.storeId = 1;
+		this.inventoryId = id;
+		this.filmId = filmId;
+
 	}
 
-	public InventoryWO(final Inventory inventory) {
-		this();
-		this.inventoryId = inventory.getInventoryId();
+	public InventoryWO(final Inventory invent) {
+		super();
+		this.storeId = 1;
+		this.inventoryId = invent.getInventoryId();
+		this.filmId = invent.getFilm().getFilmId();
 	}
 
 	public int getInventoryId() {
@@ -34,23 +37,20 @@ public class InventoryWO extends WebObject {
 		this.inventoryId = inventoryId;
 	}
 
-	public StoreWO getStoreWO() {
-		return storeWO;
+	public int getFilmId() {
+		return filmId;
 	}
 
-	public void setStoreWO(StoreWO storeWO) {
-		this.storeWO = storeWO;
+	public void setFilmId(int filmId) {
+		this.filmId = filmId;
 	}
 
-	public FilmWO getFilmWO() {
-		return filmWO;
+	public int getStoreId() {
+		return storeId;
+	}
+  
+	public void setStoreId(int storeId) {
+		this.storeId = storeId;
 	}
 
-	public void setFilmWO(FilmWO filmWO) {
-		this.filmWO = filmWO;
-	}
-
-	public String toString() {
-		return "Rental [id=" + this.inventoryId + "]";
-	}
 }

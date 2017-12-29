@@ -1,43 +1,38 @@
 package isep.web.sakila.webapi.model;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import isep.web.sakila.jpa.entities.Film;
 
 public class FilmWO extends WebObject {
 
-	private static final long serialVersionUID = -8494386839845787279L;
+	private static final long serialVersionUID = 4073820398936705L;
 
-	private int filmId;
-	private String description;
-	private int length;
-	private String rating;
-	private Date releaseYear;
-	private byte rentalDuration;
-	private BigDecimal rentalRate;
-	private BigDecimal replacementCost;
-	private String specialFeatures;
-	private String title;
-	private LanguageWO language1;
-	private LanguageWO language2;
+	protected int filmId;
+	protected String title;
+	protected String description;
+	protected Date releaseYear;
+	protected Date rentalDate;
+	protected int rentalDuration;
+	protected BigDecimal rentalRate;
+	protected int length;
 
 	public FilmWO() {
 		super();
 	}
 
 	public FilmWO(final Film film) {
-		this();
+		super();
 		this.filmId = film.getFilmId();
+		this.title = film.getTitle();
 		this.description = film.getDescription();
-		this.length = film.getLength();
-		this.rating = film.getRating();
 		this.releaseYear = film.getReleaseYear();
 		this.rentalDuration = film.getRentalDuration();
 		this.rentalRate = film.getRentalRate();
-		this.replacementCost = film.getReplacementCost();
-		this.specialFeatures = film.getSpecialFeatures();
-		this.title = film.getTitle();
+		this.length = film.getLength();
+		this.rentalDate = new Timestamp(System.currentTimeMillis());
 	}
 
 	public int getFilmId() {
@@ -48,36 +43,20 @@ public class FilmWO extends WebObject {
 		this.filmId = filmId;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	public String getRating() {
-		return rating;
-	}
-
-	public void setRating(String rating) {
-		this.rating = rating;
-	}
-
-	public byte getRentalDuration() {
-		return rentalDuration;
-	}
-
-	public void setRentalDuration(byte rentalDuration) {
-		this.rentalDuration = rentalDuration;
 	}
 
 	public Date getReleaseYear() {
@@ -88,6 +67,14 @@ public class FilmWO extends WebObject {
 		this.releaseYear = releaseYear;
 	}
 
+	public int getRentalDuration() {
+		return rentalDuration;
+	}
+
+	public void setRentalDuration(int rentalDuration) {
+		this.rentalDuration = rentalDuration;
+	}
+
 	public BigDecimal getRentalRate() {
 		return rentalRate;
 	}
@@ -96,54 +83,18 @@ public class FilmWO extends WebObject {
 		this.rentalRate = rentalRate;
 	}
 
-	public BigDecimal getReplacementCost() {
-		return replacementCost;
+	public int getLength() {
+		return length;
 	}
 
-	public void setReplacementCost(BigDecimal replacementCost) {
-		this.replacementCost = replacementCost;
+	public void setLength(int length) {
+		this.length = length;
 	}
 
-	public String getSpecialFeatures() {
-		return specialFeatures;
+	@Override
+	public String toString()
+	{
+		return "";
 	}
 
-	public void setSpecialFeatures(String specialFeatures) {
-		this.specialFeatures = specialFeatures;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public LanguageWO getLanguage1() {
-		return language1;
-	}
-
-	public void setLanguage1(LanguageWO language1) {
-		this.language1 = language1;
-	}
-
-	public LanguageWO getLanguage2() {
-		return language2;
-	}
-
-	public void setLanguage2(LanguageWO language2) {
-		this.language2 = language2;
-	}
-
-	public String toString() {
-		return "Film [id=" + this.filmId + ", description="
-				+ this.description + ", length="
-				+ this.length + ", rating=" + this.rating
-				+ ", releaseYear=" + this.releaseYear +
-				", rentalDuration=" + this.rentalDuration +
-				", rentalRate=" + this.rentalRate + ", replacementCost="
-				+ this.replacementCost + ", specialFeatures="
-				+ this.specialFeatures + ", title=" + this.title + "]";
-	}
 }

@@ -2,53 +2,53 @@ package isep.web.sakila.webapi.model;
 
 import java.util.Date;
 
-
+import isep.web.sakila.jpa.entities.Inventory;
 import isep.web.sakila.jpa.entities.Rental;
-
 
 public class RentalWO extends WebObject {
 
-	private static final long serialVersionUID = 1188257012563723980L;
+	private static final long serialVersionUID = -7784472822722713496L;
 
-	protected int rentalId;
+	protected int rentailId;
 	protected Date rentalDate;
-	protected Date returnDate;
-	protected CustomerWO customer;
-	protected InventoryWO inventoryWO;
+	protected Date returnDate; // nullable
+	protected int customerId;
+	protected int staffId;
+	protected Inventory inventory;
+
 
 	public RentalWO() {
 		super();
 	}
 
-	public RentalWO(int rentalId, Date rentalDate, Date returnDate)
-	{
-		this();
-		this.rentalId = rentalId;
+	public RentalWO(int id, Date rentalDate, int customerId, Inventory inventory) {
+		super();
+		this.rentailId = id;
 		this.rentalDate = rentalDate;
-		this.returnDate = returnDate;
+		this.returnDate = null;
+		this.customerId =customerId ;
+		this.staffId = 1;
+		this.inventory = inventory;
+
 	}
 
 	public RentalWO(final Rental rental) {
-		this();
-		this.rentalId = rental.getRentalId();
+		super();
+		this.rentailId = rental.getRentalId();
 		this.rentalDate = rental.getRentalDate();
 		this.returnDate = rental.getReturnDate();
+		this.customerId =rental.getCustomer().getCustomerId() ;
+		this.staffId = 1;
+		this.inventory = rental.getInventory();
 	}
 
-	public CustomerWO getCustomer() {
-		return customer;
+
+	public int getRentailId() {
+		return rentailId;
 	}
 
-	public void setCustomer(CustomerWO customer) {
-		this.customer = customer;
-	}
-
-	public Date getReturnDate() {
-		return returnDate;
-	}
-
-	public void setReturnDate(Date returnDate) {
-		this.returnDate = returnDate;
+	public void setRentailId(int rentailId) {
+		this.rentailId = rentailId;
 	}
 
 	public Date getRentalDate() {
@@ -59,26 +59,42 @@ public class RentalWO extends WebObject {
 		this.rentalDate = rentalDate;
 	}
 
-	public int getRentalId() {
-		return rentalId;
+	public Date getReturnDate() {
+		return returnDate;
 	}
 
-	public void setRentalId(int rentalId) {
-		this.rentalId = rentalId;
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
 	}
 
-	public InventoryWO getInventoryWO() {
-		return inventoryWO;
+	public int getCustomerId() {
+		return customerId;
 	}
 
-	public void setInventoryWO(InventoryWO inventoryWO) {
-		this.inventoryWO = inventoryWO;
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 
-	public String toString() {
-		return "Rental [id=" + this.rentalId + ", rentalDate="
-				+ this.rentalDate + ", returnDate="
-				+ this.returnDate + "]";
+	public int getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(int staffId) {
+		this.staffId = staffId;
+	}
+
+	public Inventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "";
 	}
 
 }
