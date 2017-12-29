@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Inventory;
 
 public interface InventoryRepository extends CrudRepository<Inventory, Integer> {
 
+  public Inventory findOneByInventory(String inventory);
+
 }

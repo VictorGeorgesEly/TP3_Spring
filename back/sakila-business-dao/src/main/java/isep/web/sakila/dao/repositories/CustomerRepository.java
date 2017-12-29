@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Customer;
 
 public interface CustomerRepository extends CrudRepository<Customer, Integer> {
 
+  public Customer findOneByCustomer(String customer);
+
 }

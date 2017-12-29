@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Address;
 
 public interface AddressRepository extends CrudRepository<Address, Integer> {
 
+  public Address findOneByAddress(String address);
+
 }

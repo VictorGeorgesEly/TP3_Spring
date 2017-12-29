@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Rental;
 
 public interface RentalRepository extends CrudRepository<Rental, Integer> {
 
+  public Rental findOneByRental(String rental);
+
 }

@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.FilmText;
 
 public interface FilmTextRepository extends CrudRepository<FilmText, Integer> {
 
+  public FilmText findOneByFilmText(String filmText);
+
 }

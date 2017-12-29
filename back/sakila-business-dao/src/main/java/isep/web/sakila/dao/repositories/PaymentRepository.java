@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Payment;
 
 public interface PaymentRepository extends CrudRepository<Payment, Integer> {
 
+  public Payment findOneByPayment(String payment);
+
 }

@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Language;
 
 public interface LanguageRepository extends CrudRepository<Language, Integer> {
 
+  public Language findOneByLanguage(String language);
+
 }

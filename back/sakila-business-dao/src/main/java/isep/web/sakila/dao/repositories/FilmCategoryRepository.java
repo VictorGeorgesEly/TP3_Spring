@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.FilmCategory;
 
 public interface FilmCategoryRepository extends CrudRepository<FilmCategory, Integer> {
 
+  public FilmCategory findOneByFilmCategory(String filmCategory);
+
 }

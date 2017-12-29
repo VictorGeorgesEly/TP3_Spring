@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Category;
 
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
 
+  public Category findOneByCategory(String category);
+
 }

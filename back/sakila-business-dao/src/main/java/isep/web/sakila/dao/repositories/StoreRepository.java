@@ -6,4 +6,6 @@ import isep.web.sakila.jpa.entities.Store;
 
 public interface StoreRepository extends CrudRepository<Store, Integer> {
 
+  public Store findOneByStore(String store);
+
 }
