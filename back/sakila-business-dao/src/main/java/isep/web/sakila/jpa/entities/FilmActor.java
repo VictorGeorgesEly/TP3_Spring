@@ -4,11 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-
-/**
- * The persistent class for the film_actor database table.
- * 
- */
 @Entity
 @Table(name="film_actor")
 @NamedQuery(name="FilmActor.findAll", query="SELECT f FROM FilmActor f")
@@ -18,17 +13,15 @@ public class FilmActor implements Serializable {
 	@EmbeddedId
 	private FilmActorPK id;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
-	//bi-directional many-to-one association to Actor
 	@ManyToOne
-	@JoinColumn(name="actor_id", insertable=false, updatable=false)
+	@JoinColumn(name="actor_id", nullable=false, insertable=false, updatable=false)
 	private Actor actor;
 
-	//bi-directional many-to-one association to Film
 	@ManyToOne
-	@JoinColumn(name="film_id", insertable=false, updatable=false)
+	@JoinColumn(name="film_id", nullable=false, insertable=false, updatable=false)
 	private Film film;
 
 	public FilmActor() {

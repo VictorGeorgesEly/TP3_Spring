@@ -5,71 +5,66 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-
-/**
- * The persistent class for the staff database table.
- * 
- */
 @Entity
+@Table(name="staff")
 @NamedQuery(name="Staff.findAll", query="SELECT s FROM Staff s")
 public class Staff implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="staff_id")
-	private byte staffId;
+	@Column(name="staff_id", unique=true, nullable=false)
+	private int staffId;
 
+	@Column(nullable=false)
 	private byte active;
 
+	@Column(length=50)
 	private String email;
 
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=45)
 	private String firstName;
 
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
+	@Column(length=40)
 	private String password;
 
 	@Lob
 	private byte[] picture;
 
+	@Column(nullable=false, length=16)
 	private String username;
 
-	//bi-directional many-to-one association to Payment
 	@OneToMany(mappedBy="staff")
 	private List<Payment> payments;
 
-	//bi-directional many-to-one association to Rental
 	@OneToMany(mappedBy="staff")
 	private List<Rental> rentals;
 
-	//bi-directional many-to-one association to Address
 	@ManyToOne
-	@JoinColumn(name="address_id")
+	@JoinColumn(name="address_id", nullable=false)
 	private Address address;
 
-	//bi-directional many-to-one association to Store
 	@ManyToOne
-	@JoinColumn(name="store_id")
+	@JoinColumn(name="store_id", nullable=false)
 	private Store store;
 
-	//bi-directional many-to-one association to Store
 	@OneToMany(mappedBy="staff")
 	private List<Store> stores;
 
 	public Staff() {
 	}
 
-	public byte getStaffId() {
+	public int getStaffId() {
 		return this.staffId;
 	}
 
-	public void setStaffId(byte staffId) {
+	public void setStaffId(int staffId) {
 		this.staffId = staffId;
 	}
 

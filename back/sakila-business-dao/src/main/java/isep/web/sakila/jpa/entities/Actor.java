@@ -6,25 +6,25 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Table(name="actor")
 @NamedQuery(name="Actor.findAll", query="SELECT a FROM Actor a")
 public class Actor implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="actor_id")
+	@Column(name="actor_id", unique=true, nullable=false)
 	private int actorId;
 
-	@Column(name="first_name")
+	@Column(name="first_name", nullable=false, length=45)
 	private String firstName;
 
-	@Column(name="last_name")
+	@Column(name="last_name", nullable=false, length=45)
 	private String lastName;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
-	//bi-directional many-to-one association to FilmActor
 	@OneToMany(mappedBy="actor")
 	private List<FilmActor> filmActors;
 

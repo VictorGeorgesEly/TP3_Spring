@@ -7,6 +7,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import isep.web.sakila.dao.business.IBusiness;
 import isep.web.sakila.jpa.config.PersistenceConfig;
 import isep.web.sakila.jpa.entities.Actor;
+import isep.web.sakila.jpa.entities.Film;
+import isep.web.sakila.jpa.entities.Rental;
 
 @SpringBootApplication
 public class SakilaBusinessDaoApplication
@@ -33,12 +35,12 @@ public class SakilaBusinessDaoApplication
 			Actor guiness = business.getByID(1);
 			System.out.printf("Who is ID 1? %s %s %n", guiness.getLastName(), guiness.getFirstName());
 
+
 		} catch (Exception ex)
 		{
 			System.out.println("Exception : " + ex.getCause());
 		}
 		// Closing Spring Context
 		context.close();
-
 	}
 }

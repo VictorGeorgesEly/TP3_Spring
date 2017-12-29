@@ -5,35 +5,28 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-
-/**
- * The persistent class for the inventory database table.
- * 
- */
 @Entity
+@Table(name="inventory")
 @NamedQuery(name="Inventory.findAll", query="SELECT i FROM Inventory i")
 public class Inventory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="inventory_id")
+	@Column(name="inventory_id", unique=true, nullable=false)
 	private int inventoryId;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
-	//bi-directional many-to-one association to Film
 	@ManyToOne
-	@JoinColumn(name="film_id")
+	@JoinColumn(name="film_id", nullable=false)
 	private Film film;
 
-	//bi-directional many-to-one association to Store
 	@ManyToOne
-	@JoinColumn(name="store_id")
+	@JoinColumn(name="store_id", nullable=false)
 	private Store store;
 
-	//bi-directional many-to-one association to Rental
 	@OneToMany(mappedBy="inventory")
 	private List<Rental> rentals;
 

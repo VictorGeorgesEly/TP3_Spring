@@ -5,27 +5,23 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-
-/**
- * The persistent class for the category database table.
- * 
- */
 @Entity
+@Table(name="category")
 @NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="category_id")
+	@Column(name="category_id", unique=true, nullable=false)
 	private byte categoryId;
 
-	@Column(name="last_update")
+	@Column(name="last_update", nullable=false)
 	private Timestamp lastUpdate;
 
+	@Column(nullable=false, length=25)
 	private String name;
 
-	//bi-directional many-to-one association to FilmCategory
 	@OneToMany(mappedBy="category")
 	private List<FilmCategory> filmCategories;
 
